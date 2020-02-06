@@ -26,9 +26,23 @@ namespace BusinessLogicalLayer
                 return response;
             }
 
-            //Se chegou aqui, bora pro DAL!
-            //Retorna a resposta do DAL! Se tiver dúvidas do que é esta resposta,
-            //analise o método do DAL!
+            /*
+             * try 
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Clientes.Add(item);
+                    ctx.SaveChanges(); 
+                }
+                response.Sucesso = true; 
+                return response; 
+            }
+            catch (Exception ex) 
+            {
+                response.Erros.Add("Erro ao inserir usuário no banco de dados");
+                return response; 
+            }
+            */
             return dal.Insert(item);
 
         }
@@ -44,6 +58,27 @@ namespace BusinessLogicalLayer
                 response.Sucesso = false;
                 return response;
             }
+
+            /*
+            try
+            {
+                Cliente c = new Cliente(); 
+                c.ID = id;
+                c.EhAtivo = false; 
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Entry<Cliente>(item).State = System.Data.Entity.EntityState.Modified;
+                    ctx.SaveChanges(); 
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao deletar usuário no banco de dados");
+                return response; 
+            }*/
+
             return dal.Delete(id);
         }
 
@@ -58,17 +93,70 @@ namespace BusinessLogicalLayer
                 response.Sucesso = false;
                 return response;
             }
+
+
+            /*
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Entry<Cliente>(item).State = System.Data.Entity.EntityState.Modified;
+                    ctx.SaveChanges(); 
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao alterar usuário no banco de dados");
+                return response; 
+            }
+*/
+
             return dal.Update(item);
         }
 
         public DataResponse<Cliente> GetData()
         {
-            return dal.GetData();
+            /*
+             * DataResponse response = new DataResponse(); 
+             * 
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    response.Data = ctx.Clientes.ToList();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao listar usuários no banco de dados");
+                return response; 
+            }
+*/
         }
 
         public DataResponse<Cliente> GetByID(int id)
         {
-            return dal.GetByID(id);
+            /*
+             * DataResponse response = new DataResponse(); 
+             * 
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    response.Data[0] = ctx.Clientes.Find(id);
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao listar usuários no banco de dados");
+                return response; 
+            }*/
         }
 
         private Response Validate(Cliente item)

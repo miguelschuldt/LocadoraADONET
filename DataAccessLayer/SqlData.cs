@@ -14,7 +14,7 @@ namespace DataAccessLayer
     {
         public static string ConnectionString
         {
-            get { return @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900187\Documents\SLocadoraDB.mdf;Integrated Security=True;Connect Timeout=30"; }
+            get { return @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900204\Documents\Locadora.mdf;Integrated Security=True;Connect Timeout=30"; }
         }
     }
 }

@@ -25,7 +25,23 @@ namespace BusinessLogicalLayer
             {
                 response.Sucesso = false;
                 return response;
+            };
+
+            /*
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Generos.Add(item);
+                }
+                response.Sucesso = true;
+                return response;
             }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao adicionar categoria no banco de dados");
+                return response; 
+            }*/
 
             return dal.Insert(item);
         
