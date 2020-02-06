@@ -15,9 +15,6 @@ namespace BusinessLogicalLayer
     /// </summary>
     public class GeneroBLL : IEntityCRUD<Genero>
     {
-
-        private GeneroDAL dal = new GeneroDAL();
-
         public Response Insert(Genero item)
         {
             Response response = Validate(item);
@@ -27,25 +24,26 @@ namespace BusinessLogicalLayer
                 return response;
             };
 
-            /*
+            
             try
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
                     ctx.Generos.Add(item);
+                    ctx.SaveChanges();
                 }
                 response.Sucesso = true;
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Erros.Add("Erro ao adicionar categoria no banco de dados");
-                return response; 
-            }*/
+                response.Sucesso = false;
 
-            return dal.Insert(item);
-        
+                return response; 
+            }
         }
+
         public Response Update(Genero item)
         {
             Response response = Validate(item);
@@ -55,7 +53,22 @@ namespace BusinessLogicalLayer
                 return response;
             }
 
-            return dal.Update(item);
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Entry<Genero>(item).State = System.Data.Entity.EntityState.Modified;
+                    ctx.SaveChanges();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Sucesso = false;
+                response.Erros.Add("Erro ao alterar categoria no banco de dados");
+                return response;
+            }
         }
         public Response Delete(int id)
         {
@@ -69,18 +82,79 @@ namespace BusinessLogicalLayer
                 response.Sucesso = false;
                 return response;
             }
-            return dal.Delete(id);
+
+            try
+            {
+                Genero g = new Genero();
+                g.ID = id;
+
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Entry<Genero>(g).State = System.Data.Entity.EntityState.Deleted; 
+                    ctx.SaveChanges();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Sucesso = false;
+                response.Erros.Add("Erro ao deletar categoria no banco de dados");
+                return response;
+            }
         }
 
         public DataResponse<Genero> GetData()
         {
-            return dal.GetData();
+            DataResponse<Genero> response = new DataResponse<Genero>();
+
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    response.Data = ctx.Generos.ToList();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Sucesso = false;
+                response.Erros.Add("Erro ao listar categorias no banco de dados");
+                return response;
+            }
         }
 
         public DataResponse<Genero> GetByID(int id)
         {
-            return dal.GetByID(id);
+            DataResponse<Genero> response = new DataResponse<Genero>();
+
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    Genero g = ctx.Generos.Find(id);
+                    if (g == null)
+                    {
+                        response.Sucesso = false;
+                        response.Erros.Add("Genero não encontrado no banco de dados. ");
+                    }
+                    else
+                    {
+                        response.Sucesso = true;
+                        response.Data.Add(g);
+                    }
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Sucesso = false;
+                response.Erros.Add("Erro ao listar usuários no banco de dados");
+                return response;
+            }
         }
+
         private Response Validate(Genero item)
         {
             Response response = new Response();
