@@ -16,7 +16,7 @@ namespace Entities
         public string Telefone { get; set; }
         public string Senha { get; set; }
         public bool EhAtivo { get; set; }
-
+        public virtual ICollection<Locacao> Locacoes { get; set; }
         public Funcionario()
         {
 

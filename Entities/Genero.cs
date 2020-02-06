@@ -12,6 +12,7 @@ namespace Entities
     {
         public int ID { get; set; }
         public string Nome { get; set; }
+        public virtual ICollection<Filme> Filmes { get; set; }
 
         public Genero()
         {
