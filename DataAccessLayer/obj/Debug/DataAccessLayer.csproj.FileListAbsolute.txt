@@ -1,8 +1,0 @@
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\bin\Debug\DataAccessLayer.dll
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\bin\Debug\DataAccessLayer.pdb
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\bin\Debug\Entities.dll
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\bin\Debug\Entities.pdb
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\obj\Debug\DataAccessLayer.csprojAssemblyReference.cache
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CopyComplete
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\obj\Debug\DataAccessLayer.dll
-C:\Users\900193\Documents\LocadoraADONET\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
