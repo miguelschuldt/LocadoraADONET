@@ -11,8 +11,6 @@ namespace BusinessLogicalLayer
 {
     public class LocacaoBLL : ILocacaoService
     {
-        private LocacaoDAL locacaoDAL = new LocacaoDAL();
-
         public Response EfetuarLocacao(Locacao locacao)
         {
             Response response = new Response();
@@ -58,35 +56,11 @@ namespace BusinessLogicalLayer
             }
 
 
-            //Necessário (dependendo da equipe que você estiver alocado)
-            //Vai ao banco de dados com a finalidade de descobrir se o ID
-            //do cliente associado a locação existe no banco de dados.
-            //Cliente cliente = clienteBLL.GetClientByID(locacao.Cliente.ID);
-            //if(cliente == null)
-            //{
-            //   response.Erros.Add("Cliente inexistente");
-            //}
-
-            //Utilizaremos aqui, o objeto TransactionScope para garantir que, tudo que 
-            //esta entre as chaves rodará em uma transação onde OU TUDO FUNCIONA, OU NADA FUNCIONA.
-            using (TransactionScope scope = new TransactionScope())
+            using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
-                //Cadastra a locacao no banco de dados e ainda escreve
-                //no objeto locacao o ID gerado pelo base.
-                response = locacaoDAL.EfetuarLocacao(locacao);
-                if (response.Sucesso)
-                {
-                    //Efetuar as inserções na tabela N para N
-                    response = locacaoDAL.EfetuarLocacaoFilmes(locacao);
-                    if (response.Sucesso)
-                    {
-                        //Se der certo, "commita" a operação.
-                        //Chamar o Complete significa que deu tudo certo
-                        scope.Complete();
-                    }
-                }
-            }//Ao chegar no final das chaves, caso o complete não seja chamado, o c# reverterá
-             //todas as operações em banco de dados efetuada dentro deste using
+                ctx.Locacaos.Add(locacao);
+                ctx.SaveChanges();
+            }
             return response;
         }
     }

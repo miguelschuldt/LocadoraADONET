@@ -12,7 +12,7 @@ namespace BusinessLogicalLayer
 {
     public class FilmeBLL : IEntityCRUD<Filme>, IFilmeService
     {
-        private FilmeDAL filmeDAL = new FilmeDAL();
+
 
         public Response Delete(int id)
         {
@@ -26,52 +26,158 @@ namespace BusinessLogicalLayer
                 response.Sucesso = false;
                 return response;
             }
-            return filmeDAL.Delete(id);
+
+            try
+            {
+                Filme f = new Filme();
+                f.ID = id;
+                
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Entry<Filme>(f).State = System.Data.Entity.EntityState.Deleted;
+                    ctx.SaveChanges();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Erros.Add("Erro ao deletar filme no banco de dados");
+                response.Sucesso = false;
+                return response;
+            }
         }
 
         public DataResponse<Filme> GetByID(int id)
         {
-            return filmeDAL.GetByID(id);
+            DataResponse<Filme> response = new DataResponse<Filme>();
+
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    Filme f = ctx.Filmes.Find(id);
+                    if (f == null)
+                    {
+                        response.Sucesso = false;
+                        response.Erros.Add("Funcionario não encontrado no banco de dados. ");
+                    }
+                    else
+                    {
+                        response.Sucesso = true;
+                        response.Data.Add(f);
+                    }
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Erros.Add("Erro ao encontrar filme no banco de dados");
+                response.Sucesso = false;
+
+                return response;
+            }
         }
 
         public DataResponse<Filme> GetData()
         {
-            return filmeDAL.GetData();
+            DataResponse<Filme> response = new DataResponse<Filme>();
+
+            using (LocadoraDbContext ctx = new LocadoraDbContext())
+            {
+                response.Data = ctx.Filmes.ToList();
+                response.Sucesso = true;
+            }
+
+            return response;
+        }
+
+
+        private FilmeResultSet ConvertFilmeToFilmeResultSet(Filme f)
+        {
+            return new FilmeResultSet()
+            {
+                ID = f.ID,
+                Classificacao = f.Classificacao,
+                Genero = f.Genero.Nome,
+                Nome = f.Nome
+            };
         }
 
         public DataResponse<FilmeResultSet> GetFilmes()
         {
-            return filmeDAL.GetFilmes();
+            DataResponse<FilmeResultSet> response = new DataResponse<FilmeResultSet>();
+
+            using (LocadoraDbContext ctx = new LocadoraDbContext())
+            {
+                response.Data = ctx.Filmes
+                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .ToList();
+                response.Sucesso = true;
+            }
+
+            return response;
         }
 
         public DataResponse<FilmeResultSet> GetFilmesByClassificacao(Classificacao classificacao)
         {
-            return filmeDAL.GetFilmesByClassificacao(classificacao);
+            DataResponse<FilmeResultSet> response = new DataResponse<FilmeResultSet>();
+
+            using (LocadoraDbContext ctx = new LocadoraDbContext())
+            {
+                response.Data = ctx.Filmes
+                    .Where(f => f.Classificacao == classificacao)
+                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .ToList();
+                response.Sucesso = true;
+            }
+
+            return response;
         }
 
         public DataResponse<FilmeResultSet> GetFilmesByGenero(int genero)
         {
+            DataResponse<FilmeResultSet> response = new DataResponse<FilmeResultSet>();
             if (genero <= 0)
             {
-                DataResponse<FilmeResultSet> response = new DataResponse<FilmeResultSet>();
                 response.Sucesso = false;
                 response.Erros.Add("Gênero deve ser informado.");
                 return response;
             }
-            return filmeDAL.GetFilmesByGenero(genero);
+
+            
+            using (LocadoraDbContext ctx = new LocadoraDbContext())
+            {
+                response.Data = ctx.Filmes
+                    .Where(f => f.GeneroID == genero)
+                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .ToList();
+                response.Sucesso = true;
+            }
+
+            return response;
         }
 
         public DataResponse<FilmeResultSet> GetFilmesByName(string nome)
         {
+            DataResponse<FilmeResultSet> response = new DataResponse<FilmeResultSet>();
             if (string.IsNullOrWhiteSpace(nome))
             {
-                DataResponse<FilmeResultSet> response = new DataResponse<FilmeResultSet>();
                 response.Sucesso = false;
                 response.Erros.Add("Nome deve ser informado.");
                 return response;
             }
             nome = nome.Trim();
-            return filmeDAL.GetFilmesByName(nome);
+            using (LocadoraDbContext ctx = new LocadoraDbContext())
+            {
+                response.Data = ctx.Filmes
+                    .Where(f => f.Nome.Contains(nome))
+                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .ToList();
+                response.Sucesso = true;
+            }
+
+            return response;
         }
 
         public Response Insert(Filme item)
@@ -86,7 +192,13 @@ namespace BusinessLogicalLayer
                 response.Sucesso = false;
                 return response;
             }
-            return filmeDAL.Insert(item);
+            using (LocadoraDbContext ctx = new LocadoraDbContext()) 
+            {
+                ctx.Filmes.Add(item);
+                ctx.SaveChanges();
+            }
+            response.Sucesso = true;
+            return response; 
         }
         public Response Update(Filme item)
         {
@@ -99,7 +211,25 @@ namespace BusinessLogicalLayer
                 response.Sucesso = false;
                 return response;
             }
-            return filmeDAL.Update(item);
+
+
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    ctx.Entry<Filme>(item).State = System.Data.Entity.EntityState.Modified;
+                    ctx.SaveChanges();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception)
+            {
+                response.Erros.Add("Erro ao deletar filme no banco de dados");
+                response.Sucesso = false;
+
+                return response;
+            }
         }
 
         private Response Validate(Filme item)

@@ -15,7 +15,6 @@ namespace BusinessLogicalLayer
     /// </summary>
     public class ClienteBLL : IEntityCRUD<Cliente>
     {
-        private ClienteDAL dal = new ClienteDAL();
         public Response Insert(Cliente item)
         {
             Response response = Validate(item);
@@ -26,8 +25,8 @@ namespace BusinessLogicalLayer
                 return response;
             }
 
-            /*
-             * try 
+            
+            try 
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
@@ -37,13 +36,14 @@ namespace BusinessLogicalLayer
                 response.Sucesso = true; 
                 return response; 
             }
-            catch (Exception ex) 
+            catch (Exception) 
             {
                 response.Erros.Add("Erro ao inserir usuário no banco de dados");
+                response.Sucesso = false;
+
                 return response; 
             }
-            */
-            return dal.Insert(item);
+            
 
         }
         public Response Delete(int id)
@@ -59,7 +59,7 @@ namespace BusinessLogicalLayer
                 return response;
             }
 
-            /*
+            
             try
             {
                 Cliente c = new Cliente(); 
@@ -67,19 +67,19 @@ namespace BusinessLogicalLayer
                 c.EhAtivo = false; 
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
-                    ctx.Entry<Cliente>(item).State = System.Data.Entity.EntityState.Modified;
+                    ctx.Entry<Cliente>(c).State = System.Data.Entity.EntityState.Modified;
                     ctx.SaveChanges(); 
                 }
                 response.Sucesso = true;
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Erros.Add("Erro ao deletar usuário no banco de dados");
-                return response; 
-            }*/
+                response.Sucesso = false;
 
-            return dal.Delete(id);
+                return response; 
+            }
         }
 
         public Response Update(Cliente item)
@@ -95,7 +95,7 @@ namespace BusinessLogicalLayer
             }
 
 
-            /*
+            
             try
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
@@ -106,21 +106,20 @@ namespace BusinessLogicalLayer
                 response.Sucesso = true;
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Erros.Add("Erro ao alterar usuário no banco de dados");
+                response.Sucesso = false;
+
                 return response; 
             }
-*/
-
-            return dal.Update(item);
         }
 
         public DataResponse<Cliente> GetData()
         {
-            /*
-             * DataResponse response = new DataResponse(); 
-             * 
+            
+            DataResponse<Cliente> response = new DataResponse<Cliente>(); 
+             
             try
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
@@ -130,33 +129,46 @@ namespace BusinessLogicalLayer
                 response.Sucesso = true;
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Erros.Add("Erro ao listar usuários no banco de dados");
+                response.Sucesso = false;
+
                 return response; 
             }
-*/
         }
 
         public DataResponse<Cliente> GetByID(int id)
         {
-            /*
-             * DataResponse response = new DataResponse(); 
-             * 
+            
+            DataResponse<Cliente> response = new DataResponse<Cliente>(); 
+             
             try
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
-                    response.Data[0] = ctx.Clientes.Find(id);
+                    Cliente c = ctx.Clientes.Find(id);
+                    if (c != null)
+                    {
+                        response.Data.Add(c);
+                        response.Sucesso = true;
+                    } 
+                    else
+                    {
+                        response.Sucesso = false;
+                        response.Erros.Add("Cliente não cadastrado. ");
+                    }
                 }
                 response.Sucesso = true;
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 response.Erros.Add("Erro ao listar usuários no banco de dados");
+                response.Sucesso = false;
+
                 return response; 
-            }*/
+            }
         }
 
         private Response Validate(Cliente item)

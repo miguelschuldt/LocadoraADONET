@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    class LocadoraDbContext : DbContext
+    public class LocadoraDbContext : DbContext
     {
+
+        static LocadoraDbContext()
+        {
+            Database.SetInitializer()
+        }
 
         public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900193\Documents\LocadoraDB.mdf;Integrated Security=True;Connect Timeout=30")
         {
