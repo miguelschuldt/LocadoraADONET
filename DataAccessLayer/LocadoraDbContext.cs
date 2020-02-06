@@ -29,6 +29,7 @@ namespace DataAccessLayer
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             modelBuilder.Configurations.AddFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.Properties().Where(c => c.PropertyType == typeof(string)).Configure(c => c.IsRequired().IsUnicode(false));
+            modelBuilder.Entity<Locacao>().HasMany<Filme>(l => l.Filmes).WithMany(f => f.Locacoes).Map(fl => { fl.MapLeftKey("FilmeID"); fl.MapRightKey("LocadoraID"); fl.ToTable("Filme_Locacao");});
             base.OnModelCreating(modelBuilder);
         }
     }
