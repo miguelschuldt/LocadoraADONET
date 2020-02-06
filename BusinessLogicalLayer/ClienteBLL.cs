@@ -118,12 +118,45 @@ namespace BusinessLogicalLayer
 
         public DataResponse<Cliente> GetData()
         {
-            return dal.GetData();
+            /*
+             * DataResponse response = new DataResponse(); 
+             * 
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    response.Data = ctx.Clientes.ToList();
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao listar usuários no banco de dados");
+                return response; 
+            }
+*/
         }
 
         public DataResponse<Cliente> GetByID(int id)
         {
-            return dal.GetByID(id);
+            /*
+             * DataResponse response = new DataResponse(); 
+             * 
+            try
+            {
+                using (LocadoraDbContext ctx = new LocadoraDbContext())
+                {
+                    response.Data[0] = ctx.Clientes.Find(id);
+                }
+                response.Sucesso = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Erros.Add("Erro ao listar usuários no banco de dados");
+                return response; 
+            }*/
         }
 
         private Response Validate(Cliente item)
