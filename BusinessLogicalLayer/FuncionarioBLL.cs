@@ -28,6 +28,7 @@ namespace BusinessLogicalLayer
                 {
                     response.Sucesso = true;
                     response.Data.Add(funcionario);
+                    Security.User.FuncionarioLogado = funcionario;
                 }
             }
                 
@@ -137,6 +138,7 @@ namespace BusinessLogicalLayer
         public Response Update(Funcionario item)
         {
             Response response = new Response();
+            item.Senha = HashUtils.HashPassword(item.Senha);
 
             if (string.IsNullOrWhiteSpace(item.CPF))
             {
@@ -169,7 +171,7 @@ namespace BusinessLogicalLayer
             }
             catch (Exception)
             {
-                response.Erros.Add("Erro ao deletar funcionario no banco de dados");
+                response.Erros.Add("Erro ao alterar funcionario no banco de dados");
                 response.Sucesso = false;
 
                 return response;

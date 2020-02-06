@@ -90,6 +90,8 @@ namespace WFPresentationLayer
             funcionario.Nome = txtNome.Text;
             funcionario.Senha = txtSenha.Text;
             funcionario.Telefone = txtTelefone.Text;
+            funcionario.ID = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+
             Response response = bll.Update(funcionario);
             if (response.Sucesso)
             {

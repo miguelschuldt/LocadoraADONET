@@ -30,7 +30,7 @@ namespace WFPresentationLayer
             if (response.Sucesso)
             {
                 Cliente cliente = response.Data[0];
-                idClienteASerAtualizadoExcluido = cliente.ID;
+                idClienteASerAtualizadoExcluido = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                 txtNome.Text = cliente.Nome;
                 txtCPF.Text = cliente.CPF;
                 txtEmail.Text = cliente.Email;

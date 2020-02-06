@@ -15,7 +15,7 @@ namespace Entities
         public DateTime DataNascimento { get; set; }
         public string Telefone { get; set; }
         public string Senha { get; set; }
-        public bool EhAtivo { get; set; }
+        public bool EhAtivo { get; set; } = true;
         public virtual ICollection<Locacao> Locacoes { get; set; }
         public Funcionario()
         {

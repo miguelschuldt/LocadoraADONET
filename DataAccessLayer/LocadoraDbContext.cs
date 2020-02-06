@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,15 +13,11 @@ namespace DataAccessLayer
 {
     public class LocadoraDbContext : DbContext
     {
+        private static string __hack = typeof(SqlProviderServices).ToString();
 
-        static LocadoraDbContext()
+        public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900204\Documents\agoravai.mdf;Integrated Security=True;Connect Timeout=30")
         {
-            Database.SetInitializer()
-        }
-
-        public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900193\Documents\LocadoraDB.mdf;Integrated Security=True;Connect Timeout=30")
-        {
-            Database.SetInitializer(new LocadoraTesteSrtategy());
+            //Database.SetInitializer(new LocadoraTesteSrtategy());
         }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Filme> Filmes { get; set; }
