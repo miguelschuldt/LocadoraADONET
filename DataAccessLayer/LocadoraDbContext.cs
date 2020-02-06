@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    class LocadoraDbContext : DbContext
+    public class LocadoraDbContext : DbContext
     {
 
         public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900193\Documents\LocadoraDB.mdf;Integrated Security=True;Connect Timeout=30")
         {
+            Database.SetInitializer(new LocadoraTesteSrtategy());
         }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Filme> Filmes { get; set; }
@@ -30,6 +31,8 @@ namespace DataAccessLayer
             modelBuilder.Configurations.AddFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.Properties().Where(c => c.PropertyType == typeof(string)).Configure(c => c.IsRequired().IsUnicode(false));
             modelBuilder.Entity<Locacao>().HasMany<Filme>(l => l.Filmes).WithMany(f => f.Locacoes).Map(fl => { fl.MapLeftKey("FilmeID"); fl.MapRightKey("LocadoraID"); fl.ToTable("Filme_Locacao");});
+            modelBuilder.Entity<Cliente>().HasIndex(c => c.CPF).IsUnique(true);
+            modelBuilder.Entity<Funcionario>().HasIndex(fun => fun.CPF).IsUnique(true); 
             base.OnModelCreating(modelBuilder);
         }
     }
