@@ -106,7 +106,9 @@ namespace WFPresentationLayer
 
         private void btnExcluir_Click(object sender, EventArgs e)
         {
-            Response response = bll.Delete(idFuncionarioASerAtualizadoExcluido);
+            int funcionarioID = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+
+            Response response = bll.Delete(funcionarioID);
             if (response.Sucesso)
             {
                 MessageBox.Show("Funcionário demitido com sucesso!");
