@@ -63,7 +63,7 @@ namespace WFPresentationLayer
         private void btnAtualizar_Click(object sender, EventArgs e)
         {
             Cliente cliente = new Cliente();
-            cliente.ID = idClienteASerAtualizadoExcluido;
+            cliente.ID = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
             cliente.Nome = txtNome.Text;
             cliente.Email = txtEmail.Text;
             cliente.CPF = txtCPF.Text;

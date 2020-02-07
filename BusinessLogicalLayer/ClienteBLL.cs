@@ -18,6 +18,7 @@ namespace BusinessLogicalLayer
         public Response Insert(Cliente item)
         {
             Response response = Validate(item);
+            item.EhAtivo = true;
             //Se encontramos erros de validação, retorne-os!
             if (response.Erros.Count > 0)
             {
@@ -36,7 +37,7 @@ namespace BusinessLogicalLayer
                 response.Sucesso = true; 
                 return response; 
             }
-            catch (Exception) 
+            catch (Exception en) 
             {
                 response.Erros.Add("Erro ao inserir usuário no banco de dados");
                 response.Sucesso = false;
@@ -62,18 +63,17 @@ namespace BusinessLogicalLayer
             
             try
             {
-                Cliente c = new Cliente(); 
-                c.ID = id;
-                c.EhAtivo = false; 
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
+                    Cliente c = ctx.Clientes.Find(id);
+                    c.EhAtivo = false;
                     ctx.Entry<Cliente>(c).State = System.Data.Entity.EntityState.Modified;
                     ctx.SaveChanges(); 
                 }
                 response.Sucesso = true;
                 return response;
             }
-            catch (Exception)
+            catch (Exception en)
             {
                 response.Erros.Add("Erro ao deletar usuário no banco de dados");
                 response.Sucesso = false;
@@ -100,6 +100,7 @@ namespace BusinessLogicalLayer
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
+                    item.EhAtivo = true;
                     ctx.Entry<Cliente>(item).State = System.Data.Entity.EntityState.Modified;
                     ctx.SaveChanges(); 
                 }
@@ -124,7 +125,7 @@ namespace BusinessLogicalLayer
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
-                    response.Data = ctx.Clientes.ToList();
+                    response.Data = ctx.Clientes.Where(c => c.EhAtivo).ToList();
                 }
                 response.Sucesso = true;
                 return response;
