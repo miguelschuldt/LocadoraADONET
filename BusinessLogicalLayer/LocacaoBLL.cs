@@ -58,9 +58,15 @@ namespace BusinessLogicalLayer
 
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
+                foreach (var item in locacao.Filmes)
+                {
+                    ctx.Entry<Filme>(item).State = System.Data.Entity.EntityState.Detached;
+                }
+
                 ctx.Locacaos.Add(locacao);
                 ctx.SaveChanges();
             }
+            response.Sucesso = true;
             return response;
         }
     }

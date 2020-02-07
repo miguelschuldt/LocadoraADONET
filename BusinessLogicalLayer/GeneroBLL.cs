@@ -112,7 +112,7 @@ namespace BusinessLogicalLayer
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
-                    response.Data = ctx.Generos.ToList();
+                    response.Data = ctx.Generos.Include("Filmes").ToList();
                 }
                 response.Sucesso = true;
                 return response;

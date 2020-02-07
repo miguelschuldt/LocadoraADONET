@@ -61,7 +61,7 @@ namespace BusinessLogicalLayer
                     if (f == null)
                     {
                         response.Sucesso = false;
-                        response.Erros.Add("Funcionario não encontrado no banco de dados. ");
+                        response.Erros.Add("Filme não encontrado no banco de dados. ");
                     }
                     else
                     {
@@ -86,7 +86,7 @@ namespace BusinessLogicalLayer
 
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
-                response.Data = ctx.Filmes.ToList();
+                response.Data = ctx.Filmes.Include("Genero").ToList();
                 response.Sucesso = true;
             }
 
@@ -112,6 +112,7 @@ namespace BusinessLogicalLayer
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
                 response.Data = ctx.Filmes
+                    
                     .Select(f => new FilmeResultSet() { ID = f.ID, Nome = f.Nome, Classificacao = f.Classificacao, Genero = f.Genero.Nome})
                     .ToList();
                 response.Sucesso = true;

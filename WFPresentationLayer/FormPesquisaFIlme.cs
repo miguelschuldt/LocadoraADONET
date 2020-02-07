@@ -26,6 +26,7 @@ namespace WFPresentationLayer
         private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             this.FilmeSelecionado = this.dataGridView1.SelectedRows[0].DataBoundItem as Filme;
+            
             this.Close();
         }
 
@@ -33,5 +34,6 @@ namespace WFPresentationLayer
         {
             this.dataGridView1.DataSource = new FilmeBLL().GetData().Data;
         }
+
     }
 }

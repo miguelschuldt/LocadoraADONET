@@ -181,7 +181,7 @@ namespace WFPresentationLayer
 
         private void btnExcluir_Click(object sender, EventArgs e)
         {
-            Response response = filmeBLL.Delete(idFilmeASerAtualizadoExcluido);
+            Response response = filmeBLL.Delete(Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value));
             if (response.Sucesso)
             {
                 MessageBox.Show("Filme excluído com sucesso!");

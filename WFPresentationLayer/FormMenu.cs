@@ -1,4 +1,6 @@
-﻿using BusinessLogicalLayer.Security;
+﻿using BusinessLogicalLayer;
+using BusinessLogicalLayer.Security;
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,7 +48,7 @@ namespace WFPresentationLayer
 
         private void FormMenu_Load(object sender, EventArgs e)
         {
-            this.toolStripStatusLabel1.Text = User.FuncionarioLogado.Nome;
+            //this.toolStripStatusLabel1.Text = User.FuncionarioLogado.Nome;
             timer.Interval = 1000;
             timer.Tick += Timer_Tick;
             timer.Start();

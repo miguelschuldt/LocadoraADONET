@@ -15,9 +15,12 @@ namespace DataAccessLayer
     {
         private static string __hack = typeof(SqlProviderServices).ToString();
 
-        public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900204\Documents\agoravai.mdf;Integrated Security=True;Connect Timeout=30")
+        public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900204\Documents\db.mdf;Integrated Security=True;Connect Timeout=30")
         {
             //Database.SetInitializer(new LocadoraTesteSrtategy());
+            this.Configuration.LazyLoadingEnabled = false;
+            this.Configuration.ProxyCreationEnabled = false;
+
         }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Filme> Filmes { get; set; }
@@ -32,7 +35,7 @@ namespace DataAccessLayer
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             modelBuilder.Configurations.AddFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.Properties().Where(c => c.PropertyType == typeof(string)).Configure(c => c.IsRequired().IsUnicode(false));
-            modelBuilder.Entity<Locacao>().HasMany<Filme>(l => l.Filmes).WithMany(f => f.Locacoes).Map(fl => { fl.MapLeftKey("FilmeID"); fl.MapRightKey("LocadoraID"); fl.ToTable("Filme_Locacao");});
+            modelBuilder.Entity<Locacao>().HasMany<Filme>(l => l.Filmes).WithMany(f => f.Locacoes).Map(fl => { fl.MapLeftKey("LocadoraID"); fl.MapRightKey("FilmeID"); fl.ToTable("Filme_Locacao");});
             modelBuilder.Entity<Cliente>().HasIndex(c => c.CPF).IsUnique(true);
             modelBuilder.Entity<Funcionario>().HasIndex(fun => fun.CPF).IsUnique(true); 
             base.OnModelCreating(modelBuilder);

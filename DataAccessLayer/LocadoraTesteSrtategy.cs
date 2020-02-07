@@ -13,8 +13,7 @@ namespace DataAccessLayer
     {
         protected override void Seed(LocadoraDbContext context)
         {
-            using (context)
-            {
+          
                 Cliente c = new Cliente()
                 {
                     Nome = "Necão Bernart",
@@ -64,7 +63,7 @@ namespace DataAccessLayer
                 l.Filmes.Add(f);
 
                 context.SaveChanges();
-            }
+            
             base.Seed(context);
         }
     }
