@@ -7,6 +7,7 @@ using Entities;
 using DataAccessLayer;
 using Entities.ResultSets;
 using Entities.Enums;
+using System.Linq.Expressions;
 
 namespace BusinessLogicalLayer
 {
@@ -111,13 +112,14 @@ namespace BusinessLogicalLayer
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
                 response.Data = ctx.Filmes
-                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .Select(f => new FilmeResultSet() { ID = f.ID, Nome = f.Nome, Classificacao = f.Classificacao, Genero = f.Genero.Nome})
                     .ToList();
                 response.Sucesso = true;
             }
 
             return response;
         }
+
 
         public DataResponse<FilmeResultSet> GetFilmesByClassificacao(Classificacao classificacao)
         {
@@ -127,7 +129,7 @@ namespace BusinessLogicalLayer
             {
                 response.Data = ctx.Filmes
                     .Where(f => f.Classificacao == classificacao)
-                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .Select(f => new FilmeResultSet() { ID = f.ID, Nome = f.Nome, Classificacao = f.Classificacao, Genero = f.Genero.Nome })
                     .ToList();
                 response.Sucesso = true;
             }
@@ -150,7 +152,7 @@ namespace BusinessLogicalLayer
             {
                 response.Data = ctx.Filmes
                     .Where(f => f.GeneroID == genero)
-                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .Select(f => new FilmeResultSet() { ID = f.ID, Nome = f.Nome, Classificacao = f.Classificacao, Genero = f.Genero.Nome })
                     .ToList();
                 response.Sucesso = true;
             }
@@ -172,7 +174,7 @@ namespace BusinessLogicalLayer
             {
                 response.Data = ctx.Filmes
                     .Where(f => f.Nome.Contains(nome))
-                    .Select(this.ConvertFilmeToFilmeResultSet)
+                    .Select(f => new FilmeResultSet() { ID = f.ID, Nome = f.Nome, Classificacao = f.Classificacao, Genero = f.Genero.Nome })
                     .ToList();
                 response.Sucesso = true;
             }

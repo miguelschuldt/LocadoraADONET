@@ -18,7 +18,7 @@ namespace BusinessLogicalLayer
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
                 Funcionario funcionario = new Funcionario();
-                funcionario = ctx.Funcionarios.Where(f => f.Senha == senha && f.Email == email).FirstOrDefault();
+                funcionario = ctx.Funcionarios.Where(f => f.Senha == senha && f.Email == email && f.EhAtivo).FirstOrDefault();
                 if (funcionario == null)
                 {
                     response.Sucesso = false;
@@ -50,11 +50,10 @@ namespace BusinessLogicalLayer
 
             try
             {
-                Funcionario f = new Funcionario();
-                f.ID = id;
-                f.EhAtivo = false;
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
+                    Funcionario f = ctx.Funcionarios.Find(id);
+                    f.EhAtivo = false;
                     ctx.Entry<Funcionario>(f).State = System.Data.Entity.EntityState.Modified;
                     ctx.SaveChanges();
                 }
@@ -77,7 +76,7 @@ namespace BusinessLogicalLayer
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
-                    Funcionario f = ctx.Funcionarios.Find(id);
+                    Funcionario f = ctx.Funcionarios.Where(w => w.EhAtivo).FirstOrDefault(func => func.ID == id);
                     if (f == null)
                     {
                         response.Sucesso = false;
@@ -106,7 +105,7 @@ namespace BusinessLogicalLayer
 
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
-                response.Data = ctx.Funcionarios.ToList();
+                response.Data = ctx.Funcionarios.Where(w => w.EhAtivo).ToList();
                 response.Sucesso = true; 
             }
 
