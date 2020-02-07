@@ -15,7 +15,7 @@ namespace DataAccessLayer
     {
         private static string __hack = typeof(SqlProviderServices).ToString();
 
-        public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900204\Documents\agoravai.mdf;Integrated Security=True;Connect Timeout=30")
+        public LocadoraDbContext() : base(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\900193\Documents\agoravai.mdf;Integrated Security=True;Connect Timeout=30")
         {
             //Database.SetInitializer(new LocadoraTesteSrtategy());
         }

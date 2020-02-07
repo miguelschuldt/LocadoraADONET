@@ -61,7 +61,7 @@ namespace WFPresentationLayer
         private void btnAtualizar_Click(object sender, EventArgs e)
         {
             Genero genero = new Genero();
-            genero.ID = idGeneroASerAtualizadoExcluido;
+            genero.ID = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
             genero.Nome = txtGenero.Text;
 
             Response response = bll.Update(genero);
@@ -78,7 +78,7 @@ namespace WFPresentationLayer
 
         private void btnExcluir_Click(object sender, EventArgs e)
         {
-            Response response = bll.Delete(idGeneroASerAtualizadoExcluido);
+            Response response = bll.Delete(Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value));
             if (response.Sucesso)
             {
                 MessageBox.Show("Gênero excluído com sucesso!");
