@@ -1,6 +1,7 @@
 ﻿using BusinessLogicalLayer;
 using BusinessLogicalLayer.Security;
 using Entities;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -67,7 +68,10 @@ namespace WFPresentationLayer
             Locacao locacao = new Locacao();
             locacao.ClienteID = this.cliente.ID;
             locacao.Cliente = this.cliente;
-            locacao.Filmes = listFilmesSelecionados.ToList();
+
+            List<Filme> filmes = listFilmesSelecionados.Select(c => new Filme() { ID = c.ID }).ToList();
+
+            locacao.Filmes = filmes;
             locacao.FoiPago = chkFoiPago.Checked;
             locacao.Funcionario = User.FuncionarioLogado;
             locacao.FuncionarioID = User.FuncionarioLogado.ID;

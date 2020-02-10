@@ -169,6 +169,10 @@
       <Project>{890F031F-0649-4E7F-BDD3-351B2FF960E1}</Project>
       <Name>Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{02c9141f-8ead-4349-b80c-b944568f4f9c}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

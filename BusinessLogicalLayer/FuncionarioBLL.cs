@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BusinessLogicalLayer
 {
     public class FuncionarioBLL : IEntityCRUD<Funcionario>, IFuncionarioService
@@ -18,7 +19,7 @@ namespace BusinessLogicalLayer
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
                 Funcionario funcionario = new Funcionario();
-                funcionario = ctx.Funcionarios.Where(f => f.Senha == senha && f.Email == email && f.EhAtivo).FirstOrDefault();
+                funcionario = ctx.Funcionarios.AsNoTracking().Where(f => f.Senha == senha && f.Email == email && f.EhAtivo).FirstOrDefault();
                 if (funcionario == null)
                 {
                     response.Sucesso = false;
@@ -28,7 +29,7 @@ namespace BusinessLogicalLayer
                 {
                     response.Sucesso = true;
                     response.Data.Add(funcionario);
-                    Security.User.FuncionarioLogado = funcionario;
+                    User.FuncionarioLogado = funcionario;
                 }
             }
                 

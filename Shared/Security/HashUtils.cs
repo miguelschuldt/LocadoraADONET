@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicalLayer.Security
 {
-    class HashUtils
+    public class HashUtils
     {
         /// <summary>
         /// Aplicará o algoritmo de HASH MD5, utilizando

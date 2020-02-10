@@ -2,7 +2,12 @@
 using Entities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.Linq;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -25,6 +30,7 @@ namespace BusinessLogicalLayer
             TimeSpan ts = DateTime.Now.Subtract(locacao.Cliente.DataNascimento);
             //Calcula idade do cliente
             int idade = (int)(ts.TotalDays / 365);
+
 
             //Percorre todos os filmes locados a fim de encontrar algum que o cliente não possa ver
             foreach (Filme filme in locacao.Filmes)
@@ -49,25 +55,56 @@ namespace BusinessLogicalLayer
                 locacao.Preco += filme.CalcularPreco();
             }
 
+            List<Filme> filmes = new List<Filme>();
+
             if (response.Erros.Count > 0)
             {
                 response.Sucesso = false;
                 return response;
             }
 
-
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
-                foreach (var item in locacao.Filmes)
-                {
-                    ctx.Entry<Filme>(item).State = System.Data.Entity.EntityState.Detached;
-                }
-
+                locacao.Funcionario = null;
+                locacao.Cliente = null;
+                List<Filme> tempFilmes = locacao.Filmes.ToList();
+                locacao.Filmes = null;
+                
+                //RemoveEntities<Locacao, Filme>(ctx, locacao, x => x.Filmes);
                 ctx.Locacaos.Add(locacao);
+
+                foreach (Filme filme in tempFilmes)
+                {
+                    Filme_Locacao fLocacao = new Filme_Locacao()
+                    {
+                        FilmeID = filme.ID,
+                        LocacaoID = locacao.ID
+                    };
+                    ctx.FilmeLocacoes.Add(fLocacao);
+                }
                 ctx.SaveChanges();
             }
             response.Sucesso = true;
             return response;
         }
+
+        public void RemoveEntities<T, T2>(LocadoraDbContext dt, T parent,
+Expression<Func<T, object>> expression, params T2[] children)
+where T : class
+where T2 : class
+        {
+
+            dt.Set<T>().Attach(parent);
+            ObjectContext obj = (dt as IObjectContextAdapter).ObjectContext;
+
+            foreach (T2 child in children)
+            {
+                dt.Set<T2>().Attach(child);
+                obj.ObjectStateManager.ChangeRelationshipState(parent,
+                child, expression, EntityState.Deleted);
+            }
+            dt.SaveChanges();
+        }
+
     }
 }

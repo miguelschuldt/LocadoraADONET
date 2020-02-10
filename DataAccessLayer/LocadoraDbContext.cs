@@ -27,6 +27,7 @@ namespace DataAccessLayer
         public DbSet<Genero> Generos { get; set; }
         public DbSet<Locacao> Locacaos { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
+        public DbSet<Filme_Locacao> FilmeLocacoes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -35,7 +36,8 @@ namespace DataAccessLayer
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
             modelBuilder.Configurations.AddFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.Properties().Where(c => c.PropertyType == typeof(string)).Configure(c => c.IsRequired().IsUnicode(false));
-            modelBuilder.Entity<Locacao>().HasMany<Filme>(l => l.Filmes).WithMany(f => f.Locacoes).Map(fl => { fl.MapLeftKey("LocadoraID"); fl.MapRightKey("FilmeID"); fl.ToTable("Filme_Locacao");});
+            modelBuilder.Entity<Locacao>().Ignore(c => c.Filmes);
+            //modelBuilder.Entity<Locacao>().HasMany<Filme>(l => l.Filmes).WithMany(f => f.Locacoes).Map(fl => { fl.MapLeftKey("LocacaoID"); fl.MapRightKey("FilmeID"); fl.ToTable("Filme_Locacao");});
             modelBuilder.Entity<Cliente>().HasIndex(c => c.CPF).IsUnique(true);
             modelBuilder.Entity<Funcionario>().HasIndex(fun => fun.CPF).IsUnique(true); 
             base.OnModelCreating(modelBuilder);

@@ -125,7 +125,7 @@ namespace BusinessLogicalLayer
             {
                 using (LocadoraDbContext ctx = new LocadoraDbContext())
                 {
-                    response.Data = ctx.Clientes.Where(c => c.EhAtivo).ToList();
+                    response.Data = ctx.Clientes.AsNoTracking().Where(c => c.EhAtivo).ToList();
                 }
                 response.Sucesso = true;
                 return response;

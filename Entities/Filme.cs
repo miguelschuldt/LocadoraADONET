@@ -7,6 +7,7 @@ using Entities.Enums;
 
 namespace Entities
 {
+    [Serializable]
     public class Filme
     {
         public int ID { get; set; }

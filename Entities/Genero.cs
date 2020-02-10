@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-
-    //CQRS
+    [Serializable]
     public class Genero
     {
         public int ID { get; set; }

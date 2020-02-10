@@ -55,6 +55,7 @@
     <Compile Include="LocadoraTesteSrtategy.cs" />
     <Compile Include="Mappings\ClienteMapConfig.cs" />
     <Compile Include="Mappings\FilmeMapConfig.cs" />
+    <Compile Include="Mappings\Filme_LocacaoMapConfig.cs" />
     <Compile Include="Mappings\FuncionarioMapConfig.cs" />
     <Compile Include="Mappings\GeneroMapConfig.cs" />
     <Compile Include="Mappings\LocacaoMapConfig.cs" />
@@ -64,6 +65,10 @@
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{890f031f-0649-4e7f-bdd3-351b2ff960e1}</Project>
       <Name>Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{02C9141F-8EAD-4349-B80C-B944568F4F9C}</Project>
+      <Name>Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

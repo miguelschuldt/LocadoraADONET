@@ -86,7 +86,7 @@ namespace BusinessLogicalLayer
 
             using (LocadoraDbContext ctx = new LocadoraDbContext())
             {
-                response.Data = ctx.Filmes.Include("Genero").ToList();
+                response.Data = ctx.Filmes.Include("Genero").AsNoTracking().ToList();
                 response.Sucesso = true;
             }
 
